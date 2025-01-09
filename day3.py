@@ -2,7 +2,7 @@ import re
 from functools import reduce
 
 # Part 1
-with open('input3.txt', 'r') as f:
+with open('input/input3.txt', 'r') as f:
     total = 0
     for line in f.readlines():
         matches = re.findall(r'mul\((\d+),(\d+)\)', line)
@@ -24,7 +24,7 @@ def parse_memory(inst_matches: list, flag: bool) -> (int, bool):
 
 
 # Part 2
-with open('input3.txt', 'r') as f:
+with open('input/input3.txt', 'r') as f:
     full_regex = re.compile(r"mul\((\d+),(\d+)\)|(do\(\))|(don't\(\))")
     total = 0
     enabled = True

@@ -1,7 +1,7 @@
 
 reports = []
 
-with open('input2.txt', 'r') as f:
+with open('input/input2.txt', 'r') as f:
     for line in f.readlines():
         reports.append([int(x) for x in line.split()])
 

@@ -3,7 +3,7 @@
 left = []
 right = []
 
-with open('input.txt', 'r') as f:
+with open('input/input.txt', 'r') as f:
     for line in f.readlines():
         vals = line.split()
         left.append(int(vals[0]))
