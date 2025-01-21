@@ -3,18 +3,18 @@ rules_f = {}
 rules_b = {}
 printings = []
 
-with open('input/test5.txt', 'r') as f:
+with open('input/input5.txt', 'r') as f:
     line = f.readline().strip()
     while '|' in line:
         vals = line.split('|')
         if vals[0] in rules_f:
-            rules_f[vals[0]].append(vals[1])
+            rules_f[vals[0]].add(vals[1])
         else:
-            rules_f[vals[0]] = [vals[1]]
+            rules_f[vals[0]] = {vals[1]}
         if vals[1] in rules_b:
-            rules_b[vals[1]].append(vals[0])
+            rules_b[vals[1]].add(vals[0])
         else:
-            rules_b[vals[1]] = [vals[0]]
+            rules_b[vals[1]] = {vals[0]}
         line = f.readline().strip()
     for line in f.readlines():
         printings.append(line.strip().split(','))
@@ -49,13 +49,29 @@ for printing in printings:
 
 print("The sum for part 1 is: {}".format(middle_total))
 
-print(invalid_printings)
-
+# Part 2
 invalid_middle_total = 0
 for invalid_printing in invalid_printings:
     new_list = []
+    # Since we ignore all rules without numbers in this list, recreate our
+    # forwards and backwards rules for this printing
+    new_f = {}
+    new_b = {}
     for value in invalid_printing:
-        new_list.append(value)
+        if value in rules_f:
+            cur_value = [x for x in rules_f[value] if x in invalid_printing]
+            new_f[value] = cur_value
+    for key, value in new_f.items():
+        for f_value in value:
+            if f_value in new_b:
+                new_b[f_value].append(key)
+            else:
+                new_b[f_value] = [key]
+    # Now that we have the new backwards rules, we note that they define the correct order
+    # for this printing by looking at the lengths of how many rules refer to them.
+    rules_sorted = sorted(new_b, key=lambda key: len(new_b[key]))
+    correct_order = list(new_b[rules_sorted[0]]) + rules_sorted
 
-    invalid_middle_total += int(new_list[int((len(new_list) - 1) / 2)])
+    invalid_middle_total += int(correct_order[int((len(correct_order) - 1) / 2)])
 
+print("The sum for part 2 is {}".format(invalid_middle_total))
